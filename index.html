@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Tech Solutions — Electronics Repair & Retail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #080a08;
+      --dark: #0d110d;
+      --card: #111511;
+      --border: rgba(255,255,255,0.07);
+      --accent: #2d9e56;
+      --accent-dim: #1e6b3a;
+      --accent-glow: rgba(30,107,58,0.18);
+      --accent2: #4caf74;
+      --white: #eef2ee;
+      --muted: #7a8a7a;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 5vw;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--black) !important;
+      padding: 0.55rem 1.3rem;
+      border-radius: 4px;
+      font-weight: 500 !important;
+      transition: opacity 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.85 !important; color: var(--black) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 10rem 5vw 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(30,107,58,0.18) 0%, transparent 65%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(30,107,58,0.1) 0%, transparent 65%);
+      bottom: 50px; left: -100px;
+      pointer-events: none;
+    }
+
+    .hero-content { max-width: 800px; position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.1s forwards;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.25s forwards;
+    }
+    .hero h1 .accent { color: var(--accent); }
+    .hero h1 .accent2 { color: var(--accent2); }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+
+    .hero-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.55s forwards;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: 5px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--accent); color: var(--black); }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+
+    .hero-stats {
+      display: flex; gap: 3rem;
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.7s 0.7s forwards;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 7rem 5vw; position: relative; }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+    .section-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--dark); }
+
+    .services-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      flex-wrap: wrap; gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .service-card {
+      background: var(--card);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .service-card:hover { background: #1c1e20; }
+    .service-card:hover .service-arrow { transform: translate(3px, -3px); opacity: 1; }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(45,158,86,0.1);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+    }
+
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .service-arrow {
+      position: absolute;
+      top: 2rem; right: 2rem;
+      opacity: 0.3;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    /* ── WHY US ── */
+    #why { background: var(--black); }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .why-features { display: flex; flex-direction: column; gap: 2rem; }
+
+    .feature {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .feature:hover {
+      border-color: rgba(45,158,86,0.3);
+      background: rgba(45,158,86,0.04);
+    }
+
+    .feature-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(45,158,86,0.12);
+      border-radius: 8px;
+      font-size: 1.1rem;
+    }
+
+    .feature-text h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+    }
+    .feature-text p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+    .why-visual {
+      position: relative;
+      height: 480px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .circuit-card {
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .circuit-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, transparent 50%, rgba(45,158,86,0.04) 50%),
+        linear-gradient(0deg, transparent 50%, rgba(45,158,86,0.04) 50%);
+      background-size: 30px 30px;
+    }
+
+    .circuit-inner {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 2rem;
+    }
+    .big-icon { font-size: 5rem; margin-bottom: 1.5rem; display: block; }
+    .circuit-inner h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .circuit-inner p { color: var(--muted); font-size: 0.9rem; }
+
+    .badge {
+      position: absolute;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge-tl { top: 1.5rem; left: 1.5rem; }
+    .badge-tr { top: 1.5rem; right: 1.5rem; }
+    .badge-bl { bottom: 1.5rem; left: 1.5rem; }
+    .badge-br { bottom: 1.5rem; right: 1.5rem; }
+    .badge .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 50%; background: #22c55e;
+      margin-right: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    /* ── STORE ── */
+    #store { background: var(--dark); }
+
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(45,158,86,0.3);
+    }
+
+    .product-img {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+      background: linear-gradient(135deg, #161819, #1e2022);
+      position: relative;
+    }
+
+    .product-badge {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--accent);
+      color: var(--black);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.6rem;
+      border-radius: 3px;
+    }
+
+    .product-info { padding: 1.3rem; }
+    .product-info h4 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .product-info p { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; }
+
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .price {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .btn-sm {
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      border-radius: 4px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--black); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-content .section-title { margin-bottom: 1.5rem; }
+    .about-content p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+      font-size: 0.97rem;
+    }
+
+    .timeline { margin-top: 2.5rem; }
+    .timeline-item {
+      display: flex; gap: 1.2rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-year {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 42px;
+      padding-top: 0.1rem;
+    }
+    .timeline-text { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .about-stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .about-stat .num {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .about-stat .label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--dark); }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-item {
+      display: flex; gap: 1rem; align-items: center;
+      padding: 1.2rem 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s;
+    }
+    .contact-item:hover { border-color: rgba(45,158,86,0.35); }
+    .contact-item-icon {
+      font-size: 1.3rem;
+      width: 40px; flex-shrink: 0; text-align: center;
+    }
+    .contact-item-text small {
+      font-size: 0.72rem; color: var(--muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      display: block; margin-bottom: 0.2rem;
+    }
+    .contact-item-text span { font-size: 0.92rem; font-weight: 400; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label {
+      font-size: 0.75rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+    }
+    .form-group select option { background: var(--card); }
+    .form-group textarea { height: 110px; }
+
+    /* ── REVIEWS ── */
+    #reviews { background: var(--black); }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .review-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.8rem;
+      transition: border-color 0.2s;
+    }
+    .review-card:hover { border-color: rgba(0,229,255,0.2); }
+
+    .review-stars { color: #fbbf24; font-size: 0.9rem; margin-bottom: 0.9rem; }
+    .review-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+    }
+    .review-author {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .rating-badge {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .rating-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .rating-info small { font-size: 0.75rem; color: var(--muted); display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 3rem 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .footer-logo span { color: var(--accent); }
+
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .why-grid, .about-grid, .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .why-visual { height: 300px; }
+      .form-row { grid-template-columns: 1fr; }
+      .services-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">AI Tech<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Founded 2023 · Serving since 2017</div>
+    <h1>Solutions for<br><span class="accent">All Your</span><br><span class="accent2">Tech Needs</span></h1>
+    <p class="hero-sub">Professional electronics repair and retail. From cracked screens to complex repairs — we fix it fast, right the first time.</p>
+    <div class="hero-btns">
+      <a href="#services" class="btn btn-primary">Explore Services →</a>
+      <a href="#contact" class="btn btn-outline">Get a Free Quote</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">7+</div>
+        <div class="stat-label">Years of Experience</div>
+      </div>
+      <div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Devices Repaired</div>
+      </div>
+      <div>
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Satisfaction Goal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header">
+    <div>
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Repair & Retail<br>Under One Roof</h2>
+    </div>
+    <p class="section-sub">Whether your screen is shattered or your device won't turn on, we've got the tools and expertise to fix it.</p>
+  </div>
+
+  <div class="services-grid">
+    <a href="#contact" class="service-card">
+      <div class="service-arrow">↗</div>
+      <div class="service-icon">📱</div>
+      <h3>Phone Repair</h3>
+      <p>Screen replacements, battery swaps, charging port fixes, water damage recovery, and more for all major brands.</p>
+    </a>
+    <a href="#contact" class="service-card">
+      <div class="service-arrow">↗</div>
+      <div class="service-icon">💻</div>
+      <h3>Computer Repair</h3>
+      <p>Laptop and desktop diagnostics, hardware upgrades, virus removal, OS reinstalls, and data recovery.</p>
+    </a>
+    <a href="#contact" class="service-card">
+      <div class="service-arrow">↗</div>
+      <div class="service-icon">📟</div>
+      <h3>Tablet Repair</h3>
+      <p>Cracked displays, digitizer replacement, battery issues, and software problems for iPads and Android tablets.</p>
+    </a>
+    <a href="#store" class="service-card">
+      <div class="service-arrow">↗</div>
+      <div class="service-icon">🛒</div>
+      <h3>Device Sales</h3>
+      <p>Quality pre-owned and new phones, tablets, laptops, and accessories at competitive prices.</p>
+    </a>
+    <a href="#contact" class="service-card">
+      <div class="service-arrow">↗</div>
+      <div class="service-icon">🔋</div>
+      <h3>Battery Services</h3>
+      <p>Fast battery replacements that restore your device's performance and longevity. Most done same-day.</p>
+    </a>
+    <a href="#contact" class="service-card">
+      <div class="service-arrow">↗</div>
+      <div class="service-icon">💾</div>
+      <h3>Data Recovery</h3>
+      <p>Recover lost photos, contacts, and files from damaged or unresponsive phones, tablets, and computers.</p>
+    </a>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="why-grid">
+    <div>
+      <div class="section-label">Why Choose Us</div>
+      <h2 class="section-title">We Actually<br>Care About<br>Your Device</h2>
+      <div class="why-features">
+        <div class="feature">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-text">
+            <h4>Fast Turnaround</h4>
+            <p>Most repairs completed same-day or within 24 hours. We know you need your device back ASAP.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔧</div>
+          <div class="feature-text">
+            <h4>Quality Parts</h4>
+            <p>We use only high-quality replacement parts to ensure your repair lasts. No cutting corners.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">✅</div>
+          <div class="feature-text">
+            <h4>Warranty on Repairs</h4>
+            <p>Every repair comes backed by a warranty. If something goes wrong, we make it right.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💰</div>
+          <div class="feature-text">
+            <h4>Transparent Pricing</h4>
+            <p>$60 flat diagnostic fee for all checked-in devices. No surprise fees — you'll know the full repair cost before we start any work.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual">
+      <div class="circuit-card">
+        <div class="circuit-inner">
+          <span class="big-icon">🛠️</span>
+          <h3>Expert Technicians</h3>
+          <p>Industry experience since 2017</p>
+        </div>
+        <div class="badge badge-tl"><span class="dot"></span>Open Today</div>
+        <div class="badge badge-tr">🔒 Secure Repairs</div>
+        <div class="badge badge-bl">⭐ Top Rated</div>
+        <div class="badge badge-br">📍 Local Business</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-content">
+      <div class="section-label">Our Story</div>
+      <h2 class="section-title">Passionate About<br>Technology</h2>
+      <p>AI Tech Solutions was founded in 2023 with one goal: be the go-to destination for electronics repair and retail. But our roots run deeper — we've been involved in the industry since 2017, building the skills and knowledge to handle any tech problem that comes our way.</p>
+      <p>We have a passion for all technology new and old. Our focus is to provide a solution for everyone's needs, regardless of their situation. From the latest flagship phone to a decade-old laptop, we give every device the attention it deserves.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2017</div>
+          <div class="timeline-text">Started in the electronics repair industry, building hands-on expertise.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2023</div>
+          <div class="timeline-text">Officially launched AI Tech Solutions — repair + retail under one roof.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">Now</div>
+          <div class="timeline-text">Growing our inventory, expanding services, and serving our community.</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-stats">
+      <div class="about-stat">
+        <div class="num">7+</div>
+        <div class="label">Years in Industry</div>
+      </div>
+      <div class="about-stat">
+        <div class="num">6</div>
+        <div class="label">Core Services</div>
+      </div>
+      <div class="about-stat">
+        <div class="num">All</div>
+        <div class="label">Brands Supported</div>
+      </div>
+      <div class="about-stat">
+        <div class="num">Fast</div>
+        <div class="label">Same-Day Repairs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-label">Google Reviews</div>
+  <h2 class="section-title">What Our Customers Say</h2>
+  <div class="rating-badge">
+    <div class="rating-num">5.0</div>
+    <div class="rating-info">
+      <div style="color:#fbbf24; font-size:1rem;">★★★★★</div>
+      <small>87 reviews on Google</small>
+    </div>
+  </div>
+
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Absolutely outstanding service. They were not only a better value than the competition, they completed the work four times faster and got me back in business immediately. Ash had it fully resolved in about 45 minutes."</p>
+      <div class="review-author">⭐ Google Reviewer</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"HIGHLY recommend this place for any repair you need. The atmosphere is super comfortable with free coffee, couches to sit on, and a TV to watch while you wait. Might break my phone again just to come back!"</p>
+      <div class="review-author">⭐ Google Reviewer</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"I called around for a PS5 HDMI replacement — other places quoted $160+ with 3–5 day waits. AI Tech was same-day, friendly, expedient, and even did a full systems check. Will definitely be back."</p>
+      <div class="review-author">⭐ Google Reviewer</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get in Touch</div>
+  <h2 class="section-title">Let's Fix Your<br>Device Today</h2>
+
+  <div class="contact-wrap" style="margin-top:3rem;">
+    <div>
+      <p class="section-sub" style="margin-bottom:2rem;">Reach out by phone, email, Facebook, or fill out the form — whichever is easiest for you. We'll get back to you promptly.</p>
+      <a href="tel:+12609994198" class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div class="contact-item-text">
+          <small>Call Us</small>
+          <span>(260) 999-4198</span>
+        </div>
+      </a>
+      <a href="https://www.facebook.com/share/18Vc5tgSJ7/?mibextid=wwXIfr" target="_blank" class="contact-item">
+        <div class="contact-item-icon">💬</div>
+        <div class="contact-item-text">
+          <small>Message Us on Facebook</small>
+          <span>AI Tech Solutions — Send us a DM</span>
+        </div>
+      </a>
+      <a href="mailto:repairandretail@aitechsolutionsus.com" class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <div class="contact-item-text">
+          <small>Email Us</small>
+          <span>repairandretail@aitechsolutionsus.com</span>
+        </div>
+      </a>
+      <a href="https://maps.google.com/?q=4916+Illinois+Rd+Ste+105+Fort+Wayne+IN+46804" target="_blank" class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div class="contact-item-text">
+          <small>Visit Us</small>
+          <span>4916 Illinois Rd Ste 105, Fort Wayne, IN 46804</span>
+        </div>
+      </a>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div class="contact-item-text">
+          <small>Business Hours</small>
+          <span>Mon – Fri: 10:00 AM – 6:00 PM &nbsp;|&nbsp; Sat & Sun: Closed</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="John Smith" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="john@example.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Service Needed</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>Phone Repair</option>
+            <option>Computer Repair</option>
+            <option>Tablet Repair</option>
+            <option>Battery Replacement</option>
+            <option>Data Recovery</option>
+            <option>Device Purchase</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Describe your device and the issue you're experiencing..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+          Send Message →
+        </button>
+      </form>
+      <div id="form-success" style="display:none; margin-top:1rem; padding:1rem; background:rgba(45,158,86,0.08); border:1px solid rgba(45,158,86,0.3); border-radius:8px; color:var(--accent2); font-size:0.9rem; text-align:center;">
+        ✅ Message sent! We'll be in touch soon.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">AI Tech<span>.</span></a>
+  <ul class="footer-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <span class="footer-copy">© 2025 AI Tech Solutions. All rights reserved. &nbsp;|&nbsp; <a href="https://www.facebook.com/share/18Vc5tgSJ7/?mibextid=wwXIfr" target="_blank" style="color:var(--accent); text-decoration:none;">📘 Facebook</a></span>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.reset();
+  }
+
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .feature, .product-card, .about-stat, .contact-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
