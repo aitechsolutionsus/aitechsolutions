@@ -957,7 +957,7 @@
       </div>
     </div>
     <div>
-      <form class="contact-form" onsubmit="handleSubmit(event)">
+      <form class="contact-form" action="https://formspree.io/f/mreoezzn" method="POST">
         <div class="form-row">
           <div class="form-group">
             <label>Your Name</label>
@@ -989,9 +989,7 @@
           Send Message →
         </button>
       </form>
-      <div id="form-success" style="display:none; margin-top:1rem; padding:1rem; background:rgba(45,158,86,0.08); border:1px solid rgba(45,158,86,0.3); border-radius:8px; color:var(--accent2); font-size:0.9rem; text-align:center;">
-        ✅ Message sent! We'll be in touch soon.
-      </div>
+
     </div>
   </div>
 </section>
@@ -1009,13 +1007,6 @@
 </footer>
 
 <script>
-  function handleSubmit(e) {
-    e.preventDefault();
-    document.getElementById('form-success').style.display = 'block';
-    e.target.reset();
-  }
-
-  // Intersection Observer for fade-in
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
