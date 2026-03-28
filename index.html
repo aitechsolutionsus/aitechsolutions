@@ -286,6 +286,18 @@
       .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
       .stats-row { grid-template-columns: 1fr 1fr; }
     }
+
+    .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:200;}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all 0.3s;}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .hamburger.open span:nth-child(2){opacity:0;}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,10,0.97);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;}
+    .mobile-menu.open{display:flex;}
+    .mobile-menu a{font-family:var(--font-d);font-size:2rem;font-weight:700;color:var(--white);text-decoration:none;letter-spacing:0.02em;transition:color 0.2s;}
+    .mobile-menu a:hover{color:var(--green);}
+    .mobile-menu .m-cta{background:var(--green);color:#fff!important;padding:0.7rem 2rem;border-radius:10px;font-size:1.4rem;}
+    @media(max-width:768px){.hamburger{display:flex;}.nav-links{display:none!important;}}
   </style>
 </head>
 <body>
@@ -299,7 +311,26 @@
     <li><a href="#about">About</a></li>
     <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/#services" onclick="closeMobileMenu()">Services</a>
+  <a href="/#reviews" onclick="closeMobileMenu()">Reviews</a>
+  <a href="/#about" onclick="closeMobileMenu()">About</a>
+  <a href="/#contact" class="m-cta" onclick="closeMobileMenu()">Get a Quote</a>
+</div>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  function closeMobileMenu(){hamburger.classList.remove('open');mobileMenu.classList.remove('open');document.body.style.overflow='';}
+  hamburger.addEventListener('click',()=>{
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+</script>
 
 <!-- HERO -->
 <div class="hero-wrap">
@@ -313,7 +344,7 @@
         <a href="#services" class="btn btn-outline">View Services</a>
       </div>
       <div class="hero-stats">
-        <div><div class="stat-num">7+</div><div class="stat-label">Years Experience</div></div>
+        <div><div class="stat-num">8+</div><div class="stat-label">Years Experience</div></div>
         <div><div class="stat-num">500+</div><div class="stat-label">Devices Repaired</div></div>
         <div><div class="stat-num">5.0 ⭐</div><div class="stat-label">Google Rating</div></div>
       </div>
@@ -456,7 +487,7 @@
           <div class="tl-item"><div class="tl-year">Now</div><div class="tl-text">Fort Wayne's #1 rated independent electronics repair shop on Yelp &amp; Google.</div></div>
         </div>
         <div class="stats-row">
-          <div class="sc2"><div class="n">7+</div><div class="l">Years in Industry</div></div>
+          <div class="sc2"><div class="n">8+</div><div class="l">Years in Industry</div></div>
           <div class="sc2"><div class="n">500+</div><div class="l">Devices Repaired</div></div>
           <div class="sc2"><div class="n">#1</div><div class="l">Yelp Ranked</div></div>
         </div>
@@ -542,9 +573,9 @@
   <div class="inner">
     <div class="eyebrow fade">Get in Touch</div>
     <h2 class="section-title fade">Let's Fix Your Device Today</h2>
+    <p class="section-sub fade" style="margin-bottom:2rem;">Reach out by phone, email, Facebook, or fill out the form — whichever is easiest. We'll get back to you promptly.</p>
     <div class="contact-grid">
       <div class="fade">
-        <p class="section-sub" style="margin-bottom:1.6rem;">Reach out by phone, email, Facebook, or fill out the form — whichever is easiest. We'll get back to you promptly.</p>
         <a href="tel:+12609994198" class="contact-item"><div class="ci-icon">📞</div><div class="ci-text"><small>Call Us</small><span>(260) 999-4198</span></div></a>
         <a href="https://www.facebook.com/share/18Vc5tgSJ7/?mibextid=wwXIfr" target="_blank" class="contact-item"><div class="ci-icon">💬</div><div class="ci-text"><small>Message on Facebook</small><span>AI Tech Solutions — Send us a DM</span></div></a>
         <a href="mailto:retailandrepair@aitechsolutionsus.com" class="contact-item"><div class="ci-icon">✉️</div><div class="ci-text"><small>Email Us</small><span>retailandrepair@aitechsolutionsus.com</span></div></a>
