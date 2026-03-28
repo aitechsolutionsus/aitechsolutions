@@ -87,6 +87,9 @@
     .mobile-menu a:hover{color:var(--green);}
     .mobile-menu .m-cta{background:var(--green);color:#fff!important;padding:0.7rem 2rem;border-radius:10px;font-size:1.4rem;}
     @media(max-width:768px){.hamburger{display:flex;}.nav-links{display:none!important;}}
+    .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;cursor:pointer;padding:8px;color:var(--white);}
+    .mobile-close svg{width:28px;height:28px;stroke:var(--white);stroke-width:2;stroke-linecap:round;}
+
   </style>
 </head>
 <body>
@@ -103,6 +106,7 @@
   </button>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   <a href="/" onclick="closeMobileMenu()">Home</a>
   <a href="/#services" onclick="closeMobileMenu()">Services</a>
   <a href="/#reviews" onclick="closeMobileMenu()">Reviews</a>
@@ -112,12 +116,14 @@
 <script>
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
+  const mobileClose = document.getElementById('mobileClose');
   function closeMobileMenu(){hamburger.classList.remove('open');mobileMenu.classList.remove('open');document.body.style.overflow='';}
   hamburger.addEventListener('click',()=>{
     hamburger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
     document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
   });
+  mobileClose.addEventListener('click', closeMobileMenu);
 </script>
 
 <div class="page-hero">
